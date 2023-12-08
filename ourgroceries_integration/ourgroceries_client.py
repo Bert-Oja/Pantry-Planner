@@ -1,6 +1,7 @@
 import os
 import ourgroceries
 import asyncio
+import random
 
 
 class OurGroceriesClient:
@@ -29,7 +30,7 @@ class OurGroceriesClient:
             print(f"Error in finding or creating list: {e}")
             return None
 
-    def add_recipe(self, recipe_name):
+        # def add_recipe(self, recipe_name):
         """
         Adds a recipe to the list
         """
@@ -40,7 +41,7 @@ class OurGroceriesClient:
             print(f"Error when adding recipe: {e}")
             return None
 
-    def add_or_update_item(self, list_id, item_name, quantity, unit):
+    def add_or_update_item(self, list_id, item_name, quantity, unit, item_category):
         try:
             items = (
                 asyncio.run(self.client.get_list_items(list_id))
@@ -75,8 +76,8 @@ class OurGroceriesClient:
                             self.client.add_item_to_list(
                                 list_id,
                                 value=item_name,
-                                category=None,
-                                auto_category=True,
+                                category=item_category,
+                                auto_category=False,
                                 note=new_quantity_unit,
                             )
                         )
@@ -88,8 +89,8 @@ class OurGroceriesClient:
                 self.client.add_item_to_list(
                     list_id,
                     value=item_name,
-                    category=None,
-                    auto_category=True,
+                    category=item_category,
+                    auto_category=False,
                     note=quantity_unit,
                 )
             )
@@ -97,14 +98,48 @@ class OurGroceriesClient:
             print(f"Error in adding or updating item: {e}")
 
 
-def add_recipe_to_grocery_list(recipe_json, list_name=None):
+def standardize_ingredient_name(name):
+    standardization_map = {
+        "onions": "onion",
+        "egg": "eggs",
+        "black pepper": "pepper",
+        # Add more mappings as needed
+    }
+    return standardization_map.get(name.lower(), name)
+
+
+def aggregate_ingredients(recipes):
+    aggregated_ingredients = {}
+
+    for recipe in recipes:
+        for ingredient, details in recipe["ingredients"].items():
+            # Standardize the ingredient names
+            standardized_ingredient = standardize_ingredient_name(ingredient)
+
+            if standardized_ingredient in aggregated_ingredients:
+                # Override the ingredient details with the new one
+                # This disregards the unit and updates quantity regardless
+                aggregated_ingredients[standardized_ingredient]["quantity"] += details[
+                    "quantity"
+                ]
+            else:
+                aggregated_ingredients[standardized_ingredient] = details
+
+    return aggregated_ingredients
+
+
+def add_recipes_to_grocery_list(aggregated_ingredients, list_name=None):
     og_client = OurGroceriesClient()
+
     if list_name is None:
-        list_name = recipe_json["recipe"]
+        list_name = f"Grocery List {random.randint(1,10)}"  # Default list name, change if necessary
     list_id = og_client.find_or_create_list(list_name)
 
-    for ingredient, details in recipe_json["ingredients"].items():
+    for ingredient, details in aggregated_ingredients.items():
         og_client.add_or_update_item(
-            list_id, ingredient, details["quantity"], details["unit"]
+            list_id,
+            ingredient,
+            details["quantity"],
+            details["unit"],
+            details["category"],
         )
-    og_client.add_recipe(recipe_name=recipe_json["recipe"])

@@ -5,9 +5,10 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from openai import OpenAI
 
+
 class RecipeParser:
-    def __init__(self, openai_api_key):
-        self.client = OpenAI(api_key=openai_api_key)
+    def __init__(self):
+        self.client = OpenAI()
 
     @staticmethod
     def is_url(input_string):
@@ -21,9 +22,9 @@ class RecipeParser:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
-            paragraphs = soup.find_all('p')
-            recipe_text = ' '.join([para.get_text() for para in paragraphs])
+            soup = BeautifulSoup(response.text, "html.parser")
+            paragraphs = soup.find_all("p")
+            recipe_text = " ".join([para.get_text() for para in paragraphs])
             return recipe_text
         except requests.RequestException as e:
             print(f"Error fetching the recipe: {e}")
@@ -33,7 +34,7 @@ class RecipeParser:
         try:
             dir_path = os.path.dirname(os.path.realpath(__file__))
             prompt_file_path = os.path.join(dir_path, file_name)
-            with open(prompt_file_path, 'r') as file:
+            with open(prompt_file_path, "r") as file:
                 return file.read()
         except IOError as e:
             print(f"Error reading the prompt file: {e}")
@@ -49,18 +50,26 @@ class RecipeParser:
             temperature=0.1,
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": text}
-            ]
+                {"role": "user", "content": text},
+            ],
         )
 
         output_string = completion.choices[0].message.content
         return json.loads(output_string)
 
+    def parse_multiple_recipes(self, recipes_list):
+        all_recipes = []
+        for recipe in recipes_list:
+            parsed_recipe = self.get_ingredients(recipe)
+            if parsed_recipe:
+                all_recipes.append(parsed_recipe)
+        return all_recipes
+
     def extract_ingredients_with_gpt(self, recipe_text):
-        return self._call_gpt(recipe_text, 'extract_prompt.txt')
+        return self._call_gpt(recipe_text, "extract_prompt.txt")
 
     def create_ingredient_list_with_gpt(self, dish):
-        return self._call_gpt(dish, 'create_prompt.txt')
+        return self._call_gpt(dish, "create_prompt.txt")
 
     def get_ingredients(self, input_string):
         if self.is_url(input_string):
@@ -69,4 +78,3 @@ class RecipeParser:
                 return self.extract_ingredients_with_gpt(recipe_text)
         else:
             return self.create_ingredient_list_with_gpt(input_string)
-

@@ -1,0 +1,8 @@
+# For local time
+CRON_TZ=Europe/Stockholm
+
+# Run `main.py -c` every Sunday, Monday, Tuesday, Wednesday at 23.59
+59 23 * * 0-3 python /usr/src/app/main.py -c > /var/log/cron.log 2>&1
+
+# Run `main.py` every Friday at 00.30
+30 0 * * 5 python /usr/src/app/main.py > /var/log/cron.log 2>&1

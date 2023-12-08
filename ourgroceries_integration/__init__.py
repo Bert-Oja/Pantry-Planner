@@ -1,3 +1,6 @@
-from .ourgroceries_client import add_recipe_to_grocery_list
+from .ourgroceries_client import (
+    add_recipes_to_grocery_list,
+    aggregate_ingredients
+)
 
-__all__ = ['add_recipe_to_grocery_list']
+__all__ = ["add_recipes_to_grocery_list", "aggregate_ingredients"]
