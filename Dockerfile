@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the content of the local src directory to the working directory
-COPY src/ .
+COPY . .
 
 # Install cron
 RUN apt-get update && apt-get -y install cron
