@@ -1,4 +1,4 @@
-# My Groceries
+# Pantry Planner
 
 ## Overview
 
