@@ -1,5 +1,5 @@
 # Pantry Planner
-
+![Alt text](psntryplanner_logo1.jpg)
 ## Overview
 
 This application is designed to streamline the process of managing and preparing recipes and shopping lists. It integrates SimpleNote for storing and sharing recipes, ChatGPT for parsing and processing recipe information, and OurGroceries for maintaining a shopping list. The application automates the conversion of recipes into structured formats and ensures that all necessary ingredients are included in a shopping list.
