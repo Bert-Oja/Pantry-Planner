@@ -54,8 +54,8 @@ This application is designed to streamline the process of managing and preparing
 ### Running the Docker container
 
 - Copy the `.env.example` to a new file called `.env` and update it with your credentials
-- Build the Docker container `docker build -t my-groceries .`
-- Run the Docker container with `docker run -v $(pwd)/.env:/app/.env my-groceries`
+- Build the Docker container `docker build -t pantryplanner .`
+- Run the Docker container with `docker run -v $(pwd)/.env:/app/.env pantryplanner`
 
 ### How to automate your shopping list
 
