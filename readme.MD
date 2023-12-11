@@ -55,18 +55,16 @@ This application is designed to streamline the process of managing and preparing
 
 ### Running the Docker container
 
-First, build the Docker container `docker build -t pantryplanner .`
-
 There are two ways to start Pantry Planner.
 
 The most simple way is to run it without configuration persistance. You will be prompted for the required credentials.
 
-`docker run -it --name pantryplanner pantryplanner:latest`
+`docker run -it --name pantryplanner bertoja/pantryplanner:latest`
 
 To ensure persistance:
 
 - Copy the `.env.example` to a new file called `.env` and update it with your credentials.
-- Run the Docker container with `docker run --restart=unless-stopped -v $(pwd)/.env:/app/.env --name pantryplanner pantryplanner:latest`
+- Run the Docker container with `docker run --restart=unless-stopped -v $(pwd)/.env:/app/.env --name pantryplanner bertoja/pantryplanner:latest`
 
 ### How to automate your shopping list
 
