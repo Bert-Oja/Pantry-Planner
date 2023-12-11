@@ -31,4 +31,5 @@ jobs:
         push: true
         tags: |
           bertoja/pantryplanner:${{ github.ref == 'refs/heads/main' && 'stable-main' || github.ref_name }}
-          bertoja/pantryplanner:latest
+          ${{ startsWith(github.ref, 'refs/tags/v') && 'bertoja/pantryplanner:latest' || '' }}
+
