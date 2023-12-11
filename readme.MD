@@ -1,5 +1,7 @@
 # Pantry Planner
-![Logo](https://github.com/spongy83/my-groceries/blob/main/pantryplanner_logo1.jpg )
+
+![Logo](https://github.com/spongy83/my-groceries/blob/main/pantryplanner_logo1.jpg)
+
 ## Overview
 
 This application is designed to streamline the process of managing and preparing recipes and shopping lists. It integrates SimpleNote for storing and sharing recipes, ChatGPT for parsing and processing recipe information, and OurGroceries for maintaining a shopping list. The application automates the conversion of recipes into structured formats and ensures that all necessary ingredients are included in a shopping list.
@@ -7,7 +9,7 @@ This application is designed to streamline the process of managing and preparing
 ## Prerequisites
 
 - [OpenAI API key](https://platform.openai.com/account/api-keys)
-  - The preset value for the model is `gpt-3.5-turbo` to keep costs down, though better results could be had using `gpt-4-1106-preview`
+  - The preset value for the model is `gpt-3.5-turbo` to keep costs down, though the recommended model is `gpt-4-1106-preview`
 - A free account with [OurGroceries](https://www.ourgroceries.com)
 - A free account with [SimpleNote](https://simplenote.com)
 
@@ -53,9 +55,18 @@ This application is designed to streamline the process of managing and preparing
 
 ### Running the Docker container
 
-- Copy the `.env.example` to a new file called `.env` and update it with your credentials
-- Build the Docker container `docker build -t pantryplanner .`
-- Run the Docker container with `docker run -v $(pwd)/.env:/app/.env pantryplanner`
+First, build the Docker container `docker build -t pantryplanner .`
+
+There are two ways to start Pantry Planner.
+
+The most simple way is to run it without configuration persistance. You will be prompted for the required credentials.
+
+`docker run -it --name pantryplanner pantryplanner:latest`
+
+To ensure persistance:
+
+- Copy the `.env.example` to a new file called `.env` and update it with your credentials.
+- Run the Docker container with `docker run --restart=unless-stopped -v $(pwd)/.env:/app/.env --name pantryplanner pantryplanner:latest`
 
 ### How to automate your shopping list
 
