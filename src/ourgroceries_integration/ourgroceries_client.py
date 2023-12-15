@@ -119,6 +119,8 @@ def aggregate_ingredients(recipes):
             if standardized_ingredient in aggregated_ingredients:
                 # Override the ingredient details with the new one
                 # This disregards the unit and updates quantity regardless
+                if isinstance(details["quantity"], str):
+                    continue
                 aggregated_ingredients[standardized_ingredient]["quantity"] += details[
                     "quantity"
                 ]
