@@ -60,6 +60,8 @@ class RecipeParser:
     def parse_multiple_recipes(self, recipes_list):
         all_recipes = []
         for recipe in recipes_list:
+            if recipe == "":
+                continue
             parsed_recipe = self.get_ingredients(recipe)
             if parsed_recipe:
                 all_recipes.append(parsed_recipe)
